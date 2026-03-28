@@ -3,6 +3,13 @@ from argparse import Namespace
 
 from caelestia.utils.paths import c_cache_dir
 
+DEFAULT_LOG_RULES = ";".join([
+    "qt.qml.propertyCache.append.warning=false",
+    "quickshell.dbus.objectmanager.warning=false",
+    "quickshell.io.fileview.warning=false",
+    "quickshell.service.notifications.warning=false",
+])
+
 
 class Command:
     args: Namespace
@@ -26,8 +33,7 @@ class Command:
         else:
             # Start the shell
             args = ["qs", "-c", "caelestia", "-n"]
-            if self.args.log_rules:
-                args.extend(["--log-rules", self.args.log_rules])
+            args.extend(["--log-rules", self.log_rules()])
             if self.args.daemon:
                 args.append("-d")
                 subprocess.run(args)
@@ -41,7 +47,10 @@ class Command:
                             print(line, end="")
 
     def shell(self, *args: str) -> str:
-        return subprocess.check_output(["qs", "-c", "caelestia", *args], text=True)
+        return subprocess.check_output(["qs", "-c", "caelestia", "--log-rules", self.log_rules(), *args], text=True)
+
+    def log_rules(self) -> str:
+        return self.args.log_rules or DEFAULT_LOG_RULES
 
     def filter_log(self, line: str) -> bool:
         return f"Cannot open: file://{c_cache_dir}/imagecache/" not in line
@@ -50,10 +59,7 @@ class Command:
         print(self.shell("ipc", "show"), end="")
 
     def print_log(self) -> None:
-        if self.args.log_rules:
-            log = self.shell("log", "-r", self.args.log_rules)
-        else:
-            log = self.shell("log")
+        log = self.shell("log", "-r", self.log_rules())
         # FIXME: remove when logging rules are added/warning is removed
         for line in log.splitlines():
             if self.filter_log(line):
