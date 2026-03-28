@@ -12,7 +12,6 @@ complete -c caelestia -s 'h' -l 'help' -d 'Show help'
 
 # Subcommands
 complete -c caelestia -n $not_seen -a 'shell' -d 'Start the shell or message it'
-complete -c caelestia -n $not_seen -a 'toggle' -d 'Toggle a special workspace'
 complete -c caelestia -n $not_seen -a 'scheme' -d 'Manage the colour scheme'
 complete -c caelestia -n $not_seen -a 'screenshot' -d 'Take a screenshot'
 complete -c caelestia -n $not_seen -a 'record' -d 'Start a screen recording'
@@ -69,10 +68,6 @@ complete -c caelestia -n $not_seen -a 'set' -d 'Change wallpaper'
 complete -c caelestia -n "$seen shell && $seen wallpaper && $seen set" -F
 
 complete -c caelestia -n "$seen shell && $seen notifs && not $seen clear" -a 'clear' -d 'Clear popup notifications'
-
-# Toggles
-set -l commands communication music specialws sysmon todo
-complete -c caelestia -n "$seen toggle && not $seen drawers && not $seen $commands" -a "$commands" -d 'toggle'
 
 # Scheme
 set -l commands list get set

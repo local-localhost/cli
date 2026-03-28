@@ -1,6 +1,6 @@
 import argparse
 
-from caelestia.subcommands import clipboard, emoji, record, resizer, scheme, screenshot, shell, toggle, wallpaper
+from caelestia.subcommands import clipboard, emoji, record, resizer, scheme, screenshot, shell, wallpaper
 from caelestia.utils.paths import wallpapers_dir
 from caelestia.utils.scheme import get_scheme_names, scheme_variants
 from caelestia.utils.wallpaper import get_wallpaper
@@ -24,11 +24,6 @@ def parse_args() -> tuple[argparse.ArgumentParser, argparse.Namespace]:
     shell_parser.add_argument("-l", "--log", action="store_true", help="print the shell log")
     shell_parser.add_argument("-k", "--kill", action="store_true", help="kill the shell")
     shell_parser.add_argument("--log-rules", metavar="RULES", help="log rules to apply")
-
-    # Create parser for toggle opts
-    toggle_parser = command_parser.add_parser("toggle", help="toggle a special workspace")
-    toggle_parser.set_defaults(cls=toggle.Command)
-    toggle_parser.add_argument("workspace", help="the workspace to toggle")
 
     # Create parser for scheme opts
     scheme_parser = command_parser.add_parser("scheme", help="manage the colour scheme")
