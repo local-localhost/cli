@@ -2,6 +2,7 @@ import json
 import re
 import shutil
 import subprocess
+import os
 import time
 from argparse import Namespace
 from datetime import datetime
@@ -122,7 +123,7 @@ class Command:
         )
 
         if action == "watch":
-            subprocess.Popen(["app2unit", "-O", new_path], start_new_session=True)
+            subprocess.Popen(["app2unit", "-O", new_path], start_new_session=True, env={**os.environ, "APP2UNIT_DEBUG": "0"})
         elif action == "open":
             p = subprocess.run(
                 [
@@ -137,6 +138,6 @@ class Command:
                 ]
             )
             if p.returncode != 0:
-                subprocess.Popen(["app2unit", "-O", new_path.parent], start_new_session=True)
+                subprocess.Popen(["app2unit", "-O", new_path.parent], start_new_session=True, env={**os.environ, "APP2UNIT_DEBUG": "0"})
         elif action == "delete":
             new_path.unlink()
