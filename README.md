@@ -49,6 +49,11 @@ The main control script for the Caelestia dotfiles.
 
 ## Installation
 
+If you want the full Caelestia setup with the shell, CLI, and dotfiles wired
+up together, use the official
+[`caelestia-installer`](https://github.com/local-localhost/caelestia-installer).
+The instructions below are for installing only the CLI component.
+
 ### Arch linux
 
 The CLI is available from the AUR as `caelestia-cli`. You can install it with an AUR helper
