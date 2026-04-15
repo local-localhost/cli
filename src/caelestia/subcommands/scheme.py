@@ -14,9 +14,44 @@ from caelestia.utils.theme import apply_colours
 
 class Set:
     args: Namespace
+    fallback_name = "caelestia"
+    fallback_flavour = "default"
 
     def __init__(self, args: Namespace) -> None:
         self.args = args
+
+    def _pick_compatible_flavour(self, name: str, flavour: str, mode: str) -> str | None:
+        flavours = get_scheme_flavours(name)
+
+        if flavour in flavours and mode in get_scheme_modes(name, flavour):
+            return flavour
+
+        for candidate in flavours:
+            if mode in get_scheme_modes(name, candidate):
+                return candidate
+
+        return None
+
+    def _resolve_mode_target(
+        self,
+        name: str,
+        flavour: str,
+        mode: str,
+        *,
+        allow_fallback_scheme: bool,
+    ) -> tuple[str, str] | None:
+        compatible_flavour = self._pick_compatible_flavour(name, flavour, mode)
+        if compatible_flavour is not None:
+            return name, compatible_flavour
+
+        if not allow_fallback_scheme:
+            return None
+
+        fallback_flavour = self._pick_compatible_flavour(self.fallback_name, self.fallback_flavour, mode)
+        if fallback_flavour is None:
+            return None
+
+        return self.fallback_name, fallback_flavour
 
     def run(self) -> None:
         scheme = get_scheme()
@@ -28,10 +63,23 @@ class Set:
             scheme.set_random()
             apply_colours(scheme.colours, scheme.mode)
         elif self.args.name or self.args.flavour or self.args.mode or self.args.variant:
-            if self.args.name:
-                scheme.name = self.args.name
-            if self.args.flavour:
-                scheme.flavour = self.args.flavour
+            target_name = self.args.name or scheme.name
+            target_flavour = self.args.flavour or scheme.flavour
+
+            if self.args.mode and not self.args.flavour:
+                resolved_target = self._resolve_mode_target(
+                    target_name,
+                    target_flavour,
+                    self.args.mode,
+                    allow_fallback_scheme=not self.args.name,
+                )
+                if resolved_target is not None:
+                    target_name, target_flavour = resolved_target
+
+            if target_name != scheme.name:
+                scheme.name = target_name
+            if target_flavour != scheme.flavour:
+                scheme.flavour = target_flavour
             if self.args.mode:
                 scheme.mode = self.args.mode
             if self.args.variant:

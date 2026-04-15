@@ -313,7 +313,8 @@ def apply_gtk(colours: dict[str, str], mode: str) -> None:
         write_file(gtk_config_dir / "gtk.css", gtk_template)
         write_file(gtk_config_dir / "thunar.css", thunar_template)
 
-    subprocess.run(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", "'adw-gtk3-dark'"])
+    gtk_theme = "adw-gtk3-dark" if mode == "dark" else "adw-gtk3"
+    subprocess.run(["dconf", "write", "/org/gnome/desktop/interface/gtk-theme", f"'{gtk_theme}'"])
     subprocess.run(["dconf", "write", "/org/gnome/desktop/interface/color-scheme", f"'prefer-{mode}'"])
     subprocess.run(["dconf", "write", "/org/gnome/desktop/interface/icon-theme", f"'Papirus-{mode.capitalize()}'"])
 
