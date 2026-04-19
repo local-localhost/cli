@@ -202,10 +202,60 @@ All configuration options are in `~/.config/caelestia/cli.json`.
         "enableHypr": true,
         "enableDiscord": true,
         "enableSpicetify": true,
+        "enablePandora": true,
         "enableFuzzel": true,
         "enableBtop": true,
+        "enableNvtop": true,
+        "enableHtop": true,
         "enableGtk": true,
-        "enableQt": true
+        "enableQt": true,
+        "enableWarp": true,
+        "enableChromium": true,
+        "enableZed": true,
+        "enableCava": true
+    },
+    "toggles": {
+        "communication": {
+            "discord": {
+                "enable": true,
+                "match": [{ "class": "discord" }],
+                "command": ["discord"],
+                "move": true
+            },
+            "whatsapp": {
+                "enable": true,
+                "match": [{ "class": "whatsapp" }],
+                "move": true
+            }
+        },
+        "music": {
+            "spotify": {
+                "enable": true,
+                "match": [{ "class": "Spotify" }, { "initialTitle": "Spotify" }, { "initialTitle": "Spotify Free" }],
+                "command": ["spicetify", "watch", "-s"],
+                "move": true
+            },
+            "feishin": {
+                "enable": true,
+                "match": [{ "class": "feishin" }],
+                "move": true
+            }
+        },
+        "sysmon": {
+            "btop": {
+                "enable": true,
+                "match": [{ "class": "btop", "title": "btop", "workspace": { "name": "special:sysmon" } }],
+                "command": ["foot", "-a", "btop", "-T", "btop", "fish", "-C", "exec btop"]
+            }
+        },
+        "todo": {
+            "todoist": {
+                "enable": true,
+                "match": [{ "class": "Todoist" }],
+                "command": ["todoist"],
+                "move": true
+            }
+        }
     }
 }
 ```
